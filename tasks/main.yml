@@ -1,0 +1,166 @@
+---
+- name: Set Power options
+  community.general.dconf:
+    key: '/org/gnome/settings-daemon/plugins/power/{{ item.key }}'
+    value: '{{ item.value }}'
+  loop:
+    - key: sleep-inactive-ac-type
+      value: "'{{ gnome_power_inactive_ac_type }}'"
+    - key: sleep-inactive-ac-timeout
+      value: '{{ gnome_power_inactive_ac_timeout }}'
+    - key: sleep-inactive-battery-type
+      value: "'{{ gnome_power_inactive_battery_type }}'"
+    - key: sleep-inactive-battery-timeout
+      value: '{{ gnome_power_inactive_battery_timeout }}'
+    - key: idle-dim
+      value: '{{ gnome_power_idle_dim | bool }}'
+    - key: idle-brightness
+      value: '{{ gnome_power_idle_brightness }}'
+
+- name: Set GNOME Shell favorite apps
+  community.general.dconf:
+    key: '/org/gnome/shell/favorite-apps'
+    value: '{{ (gnome_shell_favorite_apps | length > 0) | ternary(gnome_shell_favorite_apps, "@as []") }}'
+
+- name: Activate GNOME Shell extensions
+  community.general.dconf:
+    key: '/org/gnome/shell/enabled-extensions'
+    value: '{{ (gnome_shell_enabled_extensions | length > 0) | ternary(gnome_shell_enabled_extensions, "@as []") }}'
+
+- name: Setup custom keybindings
+  block:
+    - name: Create keybinding
+      ansible.builtin.include_tasks:
+        file: create-keybinding.yml
+      loop: '{{ gnome_media_keys_custom_keybindings }}'
+      loop_control:
+        loop_var: outer_item
+        index_var: outer_index
+
+    - name: Write keybindings list
+      community.general.dconf:
+        key: /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings
+        value: '{{ keybindings_list | unique }}'
+
+- name: Setup Nautilus
+  community.general.dconf:
+    key: '/org/gnome/nautilus/{{ item.key }}'
+    value: '{{ item.value }}'
+  loop:
+    - key: icon-view/default-zoom-level
+      value: "'{{ gnome_nautilus_icon_view_default_zoom_level }}'"
+    - key: icon-view/captions
+      value: '{{ (([gnome_nautilus_icon_view_captions] | flatten) + ["none", "none", "none"])[0:3] }}'
+    - key: preferences/click-policy
+      value: "'{{ gnome_nautilus_preferences_click_policy }}'"
+    - key: preferences/show-create-link
+      value: "{{ gnome_nautilus_preferences_show_create_link | bool }}"
+    - key: preferences/show-delete-permanently
+      value: "{{ gnome_nautilus_preferences_show_delete_permanently | bool }}"
+
+- name: Setup Gtk
+  community.general.dconf:
+    key: '/org/gtk/{{ item.key }}'
+    value: '{{ item.value }}'
+  loop:
+    - key: gtk4/settings/file-chooser/show-hidden
+      value: '{{ gnome_gtk_show_hidden | bool }}'
+    - key: gtk4/settings/file-chooser/sort-directories-first
+      value: '{{ gnome_gtk_sort_directories_first | bool }}'
+
+- name: Setup desktop interface
+  community.general.dconf:
+    key: '/org/gnome/desktop/interface/{{ item.key }}'
+    value: '{{ item.value }}'
+  loop:
+    - key: show-battery-percentage
+      value: '{{ gnome_desktop_interface_show_battery_percentage | bool }}'
+    - key: enable-animations
+      value: '{{ gnome_desktop_interface_enable_animations | bool }}'
+    - key: text-scaling-factor
+      value: '{{ gnome_desktop_interface_text_scaling_factor }}'
+    - key: scaling-factor
+      value: 'uint32 {{ gnome_desktop_interface_scaling_factor }}'
+    - key: gtk-theme
+      value: "'{{ gnome_desktop_interface_gtk_theme }}'"
+    - key: icon-theme
+      value: "'{{ gnome_desktop_interface_icon_theme }}'"
+
+- name: Setup privacy
+  community.general.dconf:
+    key: '{{ item.key }}'
+    value: '{{ item.value }}'
+  loop:
+    - key: /org/gnome/desktop/privacy/remember-recent-files
+      value: '{{ gnome_desktop_privacy_remember_recent_files | bool }}'
+    - key: /org/gnome/desktop/privacy/recent-files-max-age
+      value: '{{ gnome_desktop_privacy_recent_files_max_age }}'
+    - key: /org/gnome/desktop/privacy/remove-old-trash-files
+      value: '{{ gnome_desktop_privacy_remove_old_trash_files | bool }}'
+    - key: /org/gnome/desktop/privacy/remove-old-temp-files
+      value: '{{ gnome_desktop_privacy_remove_old_temp_files | bool }}'
+    - key: /org/gnome/desktop/privacy/old-files-age
+      value: 'uint32 {{ gnome_desktop_privacy_old_files_age }}'
+
+- name: Setup touchpad
+  community.general.dconf:
+    key: '/org/gnome/desktop/peripherals/{{ item.key }}'
+    value: '{{ item.value }}'
+  loop:
+    - key: touchpad/natural-scroll
+      value: '{{ gnome_desktop_peripherals_touchpad_natural_scroll }}'
+    - key: touchpad/tap-to-click
+      value: '{{ gnome_desktop_peripherals_touchpad_tap_to_click }}'
+    - key: touchpad/two-finger-scrolling-enabled
+      value: '{{ gnome_desktop_peripherals_touchpad_two_finger_scrolling_enabled }}'
+
+- name: Setup sounds
+  community.general.dconf:
+    key: '/org/gnome/desktop/sound/{{ item.key }}'
+    value: '{{ item.value | bool }}'
+  loop:
+    - key: event-sounds
+      value: '{{ gnome_desktop_sound_event_sounds }}'
+    - key: input-feedback-sounds
+      value: '{{ gnome_desktop_sound_input_feedback_sounds }}'
+
+- name: Set background
+  community.general.dconf:
+    key: /org/gnome/desktop/{{ item.key }}
+    value: '{{ item.value }}'
+  loop:
+    - key: background/picture-uri
+      value: "'file://{{ gnome_desktop_background_picture | expanduser }}'"
+    - key: screensaver/picture-uri
+      value: "'file://{{ gnome_desktop_background_picture | expanduser }}'"
+    - key: background/picture-uri-dark
+      value: "'file://{{ gnome_desktop_background_picture_dark | expanduser }}'"
+    - key: background/picture-options
+      value: "'{{ gnome_desktop_background_picture_options }}'"
+    - key: screensaver/picture-options
+      value: "'{{ gnome_desktop_background_picture_options }}'"
+  when: gnome_desktop_background_picture | length > 0
+
+- name: Setup screensaver
+  community.general.dconf:
+    key: /org/gnome/desktop/screensaver/{{ item.key }}
+    value: '{{ item.value }}'
+  loop:
+    - key: idle-activation-enabled
+      value: '{{ gnome_desktop_screensaver_idle_activation_enabled | bool }}'
+    - key: lock-enabled
+      value: '{{ gnome_desktop_screensaver_lock_enabled | bool }}'
+    - key: lock-delay
+      value: 'uint32 {{ gnome_desktop_screensaver_lock_delay }}'
+    - key: status-message-enabled
+      value: '{{ gnome_desktop_screensaver_status_message_enabled | bool }}'
+
+- name: Setup Mutter
+  community.general.dconf:
+    key: /org/gnome/mutter/{{ item.key }}
+    value: '{{ item.value | bool }}'
+  loop:
+    - key: workspaces-only-on-primary
+      value: '{{ gnome_mutter_workspaces_only_on_primary }}'
+    - key: center-new-windows
+      value: '{{ gnome_mutter_center_new_windows }}'

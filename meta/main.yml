@@ -1,0 +1,16 @@
+galaxy_info:
+  author: Egidio Docile
+  namespace: egdoc
+  role_name: gnome_setup
+  description: Ansible role to setup the GNOME desktop environment
+  license: GPLv3
+  min_ansible_version: '2.1'
+  platforms:
+    - name: Fedora
+      versions:
+        - '38'
+  galaxy_tags:
+    - gnome
+    - dconf
+
+dependencies: []

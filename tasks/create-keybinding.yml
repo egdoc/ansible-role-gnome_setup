@@ -1,0 +1,23 @@
+---
+- name: Register keybinding path
+  ansible.builtin.set_fact:
+    keybinding_path: /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom{{ outer_index }}/
+
+- name: Set keybinding name
+  community.general.dconf:
+    key: '{{ keybinding_path }}name'
+    value: "'{{ outer_item.name }}'"
+
+- name: Set keybinding command
+  community.general.dconf:
+    key: '{{ keybinding_path }}command'
+    value: "'{{ outer_item.command }}'"
+
+- name: Set keybinding keys
+  community.general.dconf:
+    key: '{{ keybinding_path }}binding'
+    value: "'{{ outer_item.binding }}'"
+
+- name: Register keybinding in custom-keybindings list
+  ansible.builtin.set_fact:
+    keybindings_list: '{{ (keybindings_list | default([])) + [keybinding_path] }}'

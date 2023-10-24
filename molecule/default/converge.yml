@@ -1,0 +1,43 @@
+---
+- name: Converge
+  hosts: all
+  pre_tasks:
+    - name: Ensure dconf is installed
+      ansible.builtin.dnf:
+        name: 
+          - dconf
+          - python3-psutil
+          - dbus-daemon
+        state: present
+
+  roles:
+    - role: egdoc.gnome_setup
+      gnome_power_inactive_ac_timeout: 3600
+      gnome_shell_favorite_apps:
+        - firefox.desktop
+        - org.gnome.Nautilus.desktop
+        - gvim.desktop
+      gnome_media_keys_custom_keybindings:
+        - name: Launch terminal
+          command: gnome-terminal
+          binding: <Super>Return
+      gnome_nautilus_icon_view_default_zoom_level: small-plus
+      gnome_nautilus_icon_view_captions: 
+        - size
+        - permissions
+      gnome_gtk_sort_directories_first: true
+      gnome_desktop_interface_show_battery_percentage: true
+      gnome_desktop_privacy_remember_recent_files: false
+      gnome_desktop_privacy_recent_files_max_age: 1
+      gnome_desktop_privacy_remove_old_temp_files: true
+      gnome_desktop_privacy_old_files_age: 1
+      gnome_desktop_peripherals_touchpad_natural_scroll: false
+      gnome_desktop_peripherals_touchpad_tap_to_click: true
+      gnome_desktop_peripherals_touchpad_two_finger_scrolling_enabled: true
+      gnome_desktop_sound_event_sounds: false
+      gnome_desktop_sound_input_feedback_sounds: false
+      gnome_desktop_screensaver_idle_activation_enabled: true
+      gnome_desktop_screensaver_lock_enabled: true
+      gnome_desktop_screensaver_lock_delay: 0
+      gnome_mutter_workspaces_only_on_primary: false
+      gnome_mutter_center_new_windows: true

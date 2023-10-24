@@ -1,0 +1,274 @@
+---
+argument_specs:
+  main:
+    short_description: Ansible role to setup the GNOME desktop environment
+    author: Egidio Docile
+    options:
+      gnome_power_inactive_ac_type:
+        description: The type of sleeping that should be performed when the computer is inactive.
+        type: str
+        required: false
+        default: suspend
+        choices:
+          - blank
+          - suspend
+          - shutdown
+          - hibernate
+          - interactive
+          - nothing
+          - logout
+      gnome_power_inactive_ac_timeout:
+        description: The amount of time in seconds the computer on AC power needs to be inactive before it goes to sleep. A value of 0 means never.
+        type: int
+        required: false
+        default: 900
+      gnome_power_inactive_timeout_battery_type:
+        type: str
+        required:  false
+        default: suspend
+        choices:
+          - blank
+          - suspend
+          - shutdown
+          - hibernate
+          - interactive
+          - nothing
+          - logout
+      gnome_power_inactive_battery_timeout:
+        description: The amount of time in seconds the computer on battery power needs to be inactive before it goes to sleep. A value of 0 means never.
+        type: int
+        required: false
+        default: 900
+      gnome_power_idle_dim:
+        description: If the screen should be dimmed to save power when the computer is idle.
+        type: bool
+        required: false
+        default: true
+      gnome_power_idle_brightness:
+        description: This is the laptop panel screen brightness used when the session is idle.
+        type: int
+        required: false
+        default: 30
+      gnome_shell_enabled_extensions:
+        description: GNOME Shell extensions have a UUID property; this key lists extensions which should be loaded. Any extension that wants to be loaded needs to be in this list.
+        type: list
+        elements: str
+        required: false
+      gnome_shell_favorite_apps:
+        description: The applications corresponding to these identifiers will be displayed in the favorites area.
+        type: list
+        elements: str
+        required: false
+        default:
+          - firefox.desktop
+          - org.gnome.Calendar.desktop
+          - org.gnome.Music.desktop
+          - org.gnome.Nautilus.desktop
+          - org.gnome.Software.desktop
+      gnome_media_keys_custom_keybindings:
+        description: List of custom keybindings.
+        type: list
+        required: false
+        elements: dict
+        options:
+          name:
+            type: str
+            required: true
+          command:
+            type: str
+            required: true
+          binding:
+            type: str
+            required: true
+      gnome_nautilus_icon_view_default_zoom_level:
+        description: Default icon view zoom level
+        type: str
+        required: false
+        default: medium
+        choices:
+          - small
+          - small-plus
+          - medium
+          - large
+          - extra-large
+      gnome_nautilus_icon_view_captions:
+        description: A list of captions below an icon in the icon view.
+        type: list
+        required: false
+        choices:
+          - size
+          - type
+          - date_modified
+          - owner
+          - group
+          - permissions
+          - mime_type
+        default: []
+      gnome_nautilus_list_view_zoom_level:
+        description: Default list view zoom level
+        type: str
+        required: false
+        default: medium
+        choices:
+          - small
+          - medium
+          - large
+      gnome_nautilus_preferences_click_policy:
+        description: Possible values are “single” to launch files on a single click, or “double” to launch them on a double click.
+        type: str
+        required: false
+        default: double
+        choices:
+          - single
+          - double
+      gnome_nautilus_preferences_show_create_link:
+        description: If set to true, then Nautilus will show context menu items to create links from the copied or selected files.
+        type: bool
+        required: false
+        default: false
+      gnome_nautilus_preferences_show_delete_permanently:
+        description: If set to true, then Nautilus will show a delete permanently context menu item to bypass the Trash.
+        type: bool
+        required: false
+        default: false
+      gnome_gtk_sort_directories_first:
+        description: If set to true, then folders are shown before files in the list.
+        type: bool
+        required: false
+        default: false
+      gnome_gtk_show_hidden:
+        description: Controls whether the file chooser shows hidden files or not.
+        type: bool
+        required: false
+        default: false
+      gnome_desktop_interface_show_battery_percentage:
+        description: If true, display battery percentage in the status menu, in addition to the icon.
+        type: bool
+        required: false
+        default: false
+      gnome_desktop_interface_enable_animations:
+        description: Whether animations should be displayed
+        type: bool
+        required: false
+        default: true
+      gnome_desktop_interface_text_scaling_factor:
+        description: Factor used to enlarge or reduce text display, without changing font size.
+        type: float
+        required: false
+        default: 1
+      gnome_desktop_interface_scaling_factor:
+        description: Integer factor used to scale windows by.
+        type: int
+        required: false
+        default: 0
+      gnome_desktop_interface_gtk_theme:
+        description: Basename of the default theme used by gtk+.
+        type: str
+        required: false
+        default: Adwaita
+      gnome_desktop_interface_icon_theme:
+        description: Icon theme to use for the panel, nautilus etc.
+        type: str
+        required: false
+        default: Adwaita
+      gnome_desktop_privacy_remember_recent_files:
+        description: Whether to remember recently used files.
+        type: bool
+        required: false
+        default: true
+      gnome_desktop_privacy_recent_files_max_age:
+        description: Number of days to remember recently used files for.
+        type: int
+        required: false
+        default: 1
+      gnome_desktop_privacy_remove_old_trash_files:
+        description: Whether to remove old files from the trash automatically
+        type: bool
+        required: false
+        default: false
+      gnome_desktop_privacy_remove_old_temp_files:
+        description: Whether to remove old temporary files automatically
+        type: bool
+        required: false
+        default: true
+      gnome_desktop_privacy_old_files_age:
+        description: Number of days to keep trash and temporary files
+        type: int
+        required: false
+        default: 30
+      gnome_desktop_peripherals_touchpad_natural_scroll:
+        description: Whether two-finger scrolling is enabled
+        type: bool
+        required: false
+        default: true
+      gnome_desktop_peripherals_touchpad_tap_to_click:
+        description: Enable mouse clicks with touchpad
+        type: bool
+        required: false
+        default: false
+      gnome_desktop_peripherals_touchpad_two_finger_scrolling_enabled:
+        description: Whether two-finger scrolling is enabled
+        type: bool
+        required: false
+        default: true
+      gnome_desktop_sound_event_sounds:
+        description: Sounds for events
+        type: bool
+        required: false
+        default: true
+      gnome_desktop_sound_input_feedback_sounds:
+        description: Input feedback sound
+        type: bool
+        required: false
+        default: false
+      gnome_desktop_background_picture:
+        description: Path of background image.
+        type: str
+        required: false
+      gnome_desktop_background_picture_dark:
+        description: Path of background image in dark mode.
+        type: str
+        required: false
+      gnome_desktop_background_picture_options:
+        description: Determines how the image set by wallpaper_filename is rendered.
+        type: str
+        required: false
+        default: zoom
+        choices:
+          - none
+          - wallpaper
+          - centered
+          - scaled
+          - streched
+          - zoom
+          - spanned
+      gnome_desktop_screensaver_idle_activation_enabled:
+        description: Set this to true to activate the screensaver when the session is idle
+        type: bool
+        required: false
+        default: true
+      gnome_desktop_screensaver_lock_enabled:
+        description: Set this to TRUE to lock the screen when the screensaver goes active
+        type: bool
+        required: false
+        default: true
+      gnome_desktop_screensaver_lock_delay:
+        description: The number of seconds after screensaver activation before locking the screen
+        type: int
+        required: false
+        default: 0
+      gnome_desktop_screensaver_status_message_enabled:
+        description: Allow the session status message to be displayed
+        type: bool
+        required: false
+        default: true
+      gnome_mutter_workspaces_only_on_primary:
+        description: Determines whether workspace switching should happen for windows on all monitors or only for windows on the primary
+        type: bool
+        required: false
+        default: true
+      gnome_mutter_center_new_windows:
+        description: When true, the new windows will always be put in the center of the active screen of the monitor
+        type: bool
+        required: false
+        default: false
