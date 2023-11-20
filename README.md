@@ -251,6 +251,12 @@ gnome_desktop_screensaver_status_message_enabled: true
 Allow the session status message to be displayed
 
 ```yaml
+gnome_desktop_wm_keybindings: []
+```
+
+List of dictionaries describing window manager actions and associated keybindings
+
+```yaml
 gnome_mutter_workspaces_only_on_primary: false
 ```
 
@@ -278,6 +284,11 @@ Including an example of how to use your role (for instance, with variables passe
         - role: egdoc.gnome_setup 
           gnome_desktop_peripherals_touchpad_natural_scroll: false
           gnome_desktop_peripherals_touchpad_tap_to_click: true
+          gnome_desktop_wm_keybindings:
+            - name: close
+              keybindings:
+                - <Alt>F4
+                - <Ctrl><Shift>q
 
 License
 -------

@@ -38,5 +38,6 @@ gnome_desktop_screensaver_idle_activation_enabled: true
 gnome_desktop_screensaver_lock_enabled: true
 gnome_desktop_screensaver_lock_delay: 0
 gnome_desktop_screensaver_status_message_enabled: true
+gnome_desktop_wm_keybindings: []
 gnome_mutter_workspaces_only_on_primary: false
 gnome_mutter_center_new_windows: false

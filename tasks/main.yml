@@ -155,6 +155,12 @@
     - key: status-message-enabled
       value: '{{ gnome_desktop_screensaver_status_message_enabled | bool }}'
 
+- name: Set Window manager keybindings
+  community.general.dconf:
+    key: /org/gnome/desktop/wm/keybindings/{{ item.name }}
+    value: '{{ item.keybindings }}'
+  loop: '{{ gnome_desktop_wm_keybindings }}'
+
 - name: Setup Mutter
   community.general.dconf:
     key: /org/gnome/mutter/{{ item.key }}

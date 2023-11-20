@@ -262,6 +262,20 @@ argument_specs:
         type: bool
         required: false
         default: true
+      gnome_desktop_wm_keybindings:
+        description: List of dictionaries describing window manager actions and associated keybindings
+        type: list
+        required: false
+        default: []
+        elements: dict
+        options:
+          name:
+            type: str
+            required: true
+          keybindings:
+            type: list
+            elements: str
+            required: true
       gnome_mutter_workspaces_only_on_primary:
         description: Determines whether workspace switching should happen for windows on all monitors or only for windows on the primary
         type: bool
